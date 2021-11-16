@@ -1,0 +1,32 @@
+  
+# System
+.DS_Store
+
+# IDE (pycharm)
+.idea/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# project specific
+image
+logs
+save
+sh_files
+utils/do_things/
+data/
+
