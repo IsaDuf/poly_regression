@@ -1,6 +1,6 @@
 Polygonal Approximation of Circular Regression
 =======================================
-Implementation of the paper "Using Circular Models to Improve Music Emotion Recognition".
+Pytorch implementation of the paper "Using Circular Models to Improve Music Emotion Recognition".
 I. Dufour and G. Tzanetakis, "Using Circular Models to Improve Music Emotion Recognition," in IEEE Transactions on Affective Computing, vol. 12, no. 3, pp. 666-681, 1 July-Sept. 2021, doi: 10.1109/TAFFC.2018.2885744.
 
 ## Description
