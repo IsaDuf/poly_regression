@@ -6,25 +6,28 @@ I. Dufour and G. Tzanetakis, "Using Circular Models to Improve Music Emotion Rec
 ## Description
 
 Pytorch implementation of the models used for the paper.
+Implementation used in paper was not made in pytorch.
 
 ## Getting Started
 
 ### Dependencies
 
-numpy
-scipy
-sklearn
-pytorch
-tensorboardX
+* numpy
+* scipy
+* sklearn
+* pytorch
+* tensorboardX
+* h5py
 
 ### Installing
 
+* TBA
 * How/where to download
 * Any required changes to files/folders
 
 ### Executing program
 
-* How to run the program
+* TBA
 
 ## Help
 
