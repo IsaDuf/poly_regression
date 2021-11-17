@@ -250,84 +250,6 @@ def rotate_to_range(data, low=-np.pi, high=np.pi):
     return data_out
 
 
-# def circ_rounded(data, val=0.125, low=1.0, high=6.0):
-#     """Rounds elements of data to closest value on a circle where low = high.
-#
-#     Rounds elements of `data` to closest value on a circular range [`low`, `high`) (i.e. where `low` = `high`)
-#     For example, the range of the circle in degrees goes from `low` = 0 to `high` = 360 degrees.
-#     Values are first rotated within the range, then rounded to the closest step of length val within the range.
-#
-#     Parameters
-#     ---------- --- needs update
-#     data: numpy float, int, float, of array
-#         value to be rounded
-#     val : float or int
-#         step size to round to (length of interval between two rounded values)
-#     low : float or int
-#         lowest value on the circular line
-#     high : float or int
-#         highest value on circular line
-#
-#     Returns
-#     -------
-#     data_out :  ndarray or tensor
-#         Rounded data elements within range [low, high) in type
-#
-#     Examples
-#     -------
-#     >>> a = np.array([-361])
-#     >>> circ_rounded(a, val=5, low=0, high=360)
-#     array([0.])
-#
-#     >>> a = np.array([358.45, 362.345, -898, 6.35])
-#     >>> circ_rounded(a, val=1, low=0, high=360)
-#     array([358.,   2., 182.,   6.])
-#
-#     >>> a = np.array([358.45, 362.345, -898, 6.35])
-#     >>> circ_rounded(a, val=0.125, low=0, high=360)
-#     array([358.5  ,   2.375, 182.   ,   6.375])
-#
-#     >>> a = np.array([358.45, 362.345, -898, 6.35])
-#     >>> b = a.reshape(2,2)
-#     >>> circ_rounded(b, low=0, high=360)
-#     array([[358.5  ,   2.375],
-#            [182.   ,   6.375]])
-#
-#     >>> a = np.array([-11*np.pi, 6*np.pi, 11*np.pi])
-#     >>> circ_rounded(a, np.pi, low=-np.pi, high=np.pi)
-#     array([-3.14159265,  0.        , -3.14159265])
-#
-#     >>> a = np.array([])
-#     >>> circ_rounded(a)
-#     array([], dtype=float64)
-#
-#     """
-#     # limit range of data to circumference value range
-#     data_out = rotate_to_range(data, low=low, high=high)
-#
-#     data_out, data_type, data_shape = convert_to(data_out)
-#
-#     if 'torch.Tensor' in str(type(data_out)):
-#         this_round = torch.round
-#     else:
-#         this_round = np.around
-#
-#     # fixes minor numerical inconsistencies that occurs at lower and upper bound of range
-#     data_out[data_out == high] = high - 1e-8
-#     data_out[data_out == low] = low + 1e-8
-#
-#     # round values
-#     data_out = val * this_round(data_out/val)
-#
-#     # get consistent value outputs
-#     data_out[data_out == -0] = 0
-#     data_out[data_out == high] = low
-#
-#     data_out = convert_back(data_out, data_type, data_shape)
-#
-#     return data_out
-#
-#
 def label_to_class(data, num_map_class=5, low=1, high=6.0):
     """Discretize continuous labels to corresponding class labels based on range intervals of equal width.
 
@@ -473,37 +395,6 @@ def scale_to_range(data, new_low=1, new_high=6.0, old_low=-np.pi, old_high=np.pi
     return (data - old_low) * (new_high - new_low) / (old_high - old_low) + new_low
 
 
-# def utc_to_labels(data, time_zone='US/Eastern'):
-#     """
-#     Converts UTC timestamp to labels hour, day, week with respect to `time_zone`.
-#
-#
-#     Parameters
-#     ----------
-#     data : float or int
-#         the UTC timestamp to convert to labels
-#
-#     time_zone : str
-#         time zone of the desired labels. Default is 'US/Eastern'. Set to None for
-#         local time zone. See pytz module for list of timezone of run `pytz.all_timezones`.
-#
-#     Returns
-#     -------
-#
-#
-#     """
-#
-#     tz = timezone(time_zone)
-#     date_time = datetime.datetime.fromtimestamp(data)
-#     date_time = date_time.astimezone(tz)
-#
-#     hour = np.float32(date_time.time().hour + date_time.time().minute/60)
-#     day = np.float32(date_time.weekday())
-#     week = np.float32(date_time.isocalendar()[1])
-#
-#     return hour, day, week
-#
-#
 def convert_to(data):
     """Convert data to numpy array
 

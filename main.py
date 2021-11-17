@@ -350,7 +350,6 @@ def train(config):
                 #         "optimizer": optimizer.state_dict(),
                 #     }, checkpoint_file)
 
-
             # Validate results every validation interval
             if iter_idx % config.val_intv == 0:
                 va_loss = []
@@ -503,14 +502,6 @@ def test(config, model_to_load="best_model.pth"):
     te_cls_pred = []
     te_circ_label = []
     te_circ_pred = []
-    te_data_loss = []
-    # te_mad = []
-    # te_r_label = []
-    # te_r_pred = []
-    # te_val_label = []
-    # te_val_pred = []
-    # te_arous_label = []
-    # te_arous_pred = []
 
     data_range = config.max_range - config.min_range
 
