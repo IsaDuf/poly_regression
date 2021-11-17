@@ -742,7 +742,7 @@ if __name__ == "__main__":
         config.num_class = 1
 
     # # use dataset specific default values when None are specified by args
-    # if config.feat == 'raw_audio' or config.label_type == "tricycle":
+    # if config.feat == 'raw_audio':
     #     dsp_param = {'4q': {'sr': 22050, 'n_fft': 1024, 'hop_length': 1024//4,
     #                         'win_length': 1024, 'window': 'hann', 'n_mels': 128, 'duration': 2.0,
     #                         'num_map_class': 4, 'min_range': -np.pi, 'max_range': np.pi},
