@@ -1,9 +1,5 @@
-import os
-import time
-
 import numpy as np
 from sklearn.metrics import classification_report, confusion_matrix
-import h5py
 
 
 def report_loss(loss, config, mr):
@@ -148,7 +144,7 @@ def report_precision(label, pred, config, mr):
     print()
 
 
-def report_classification_results(label, pred, config, cycle=None):
+def report_classification_results(label, pred, config):
     """Prints confusion matrix and classification reports.
 
     Prints confusion matrix and classification reports based on `config.num_class` if the targets are discrete, or
@@ -168,81 +164,14 @@ def report_classification_results(label, pred, config, cycle=None):
     """
     print("\n====== Evaluating as Classifier ==========")
     labels = None
-    if cycle is not None:
-        num_map = {"hour": 24, "day": 7, "week": 52}
 
     if config.num_class == 1:
-        if config.label_type == "tricycle":
-            num_map_class = num_map[cycle]
-            target_names = [str(i) for i in range(1, num_map_class + 1)]
-            labels = [i for i in range(0, num_map_class)]
-        else:
-            target_names = [str(i) for i in range(1, config.num_map_class + 1)]
+        target_names = [str(i) for i in range(1, config.num_map_class + 1)]
     else:
         target_names = [str(i) for i in range(1, config.num_class + 1)]
 
     print(confusion_matrix(label, pred, labels=labels))
     print(classification_report(label, pred, labels=labels, target_names=target_names))
-
-
-def get_va_scores(config, r_label, r_pred, val_label, val_pred, arous_label, arous_pred, mr):
-
-    if mr:
-        val_pred_per_run = np.split(val_pred, config.n_run)
-        arous_pred_per_run = np.split(arous_pred, config.n_run)
-        val_label_per_run = np.split(val_label, config.n_run)
-        arous_label_per_run = np.split(arous_label, config.n_run)
-
-        med = []
-        rmse_val = []
-        rmse_arous = []
-        r2_val = []
-        r2_arous = []
-        for i in range(config.n_run):
-            med.append(np.mean(np.sqrt(np.square(val_pred_per_run[i] - val_label_per_run[i]) +
-                                  np.square(arous_pred_per_run[i] - arous_label_per_run[i]))))
-
-            rmse_val.append(np.sqrt(np.mean((val_pred_per_run[i] - val_label_per_run[i]) ** 2)))
-            rmse_arous.append(np.sqrt(np.mean((arous_pred_per_run[i] - arous_label_per_run[i]) ** 2)))
-
-            r2_val.append(1 - np.sum((val_label_per_run[i] - val_pred_per_run[i]) ** 2) /
-                          np.sum((val_label_per_run[i] - np.mean(val_label_per_run[i])) ** 2))
-            r2_arous.append(1 - np.sum((arous_label_per_run[i] - arous_pred_per_run[i]) ** 2) /
-                            np.sum((arous_label_per_run[i] - np.mean(arous_label_per_run[i])) ** 2))
-
-        print("\nMean Euclidean Distance:", med)
-        print("MED over run:", np.mean(med))
-
-        print("\nVal RMSE:", rmse_val)
-        print("Val RMSE over run:", np.mean(rmse_val))
-
-        print("\nArous RMSE:", rmse_arous)
-        print("Arous RMSE over run:", np.mean(rmse_arous))
-
-        print("\nR^2 Val :", r2_val)
-        print("R^2 Val over run:", np.mean(r2_val))
-
-        print("\nR^2 Arous:", r2_arous)
-        print("R^2 Arous over run:", np.mean(r2_arous))
-
-    else:
-        # get MED
-        med = np.mean(np.sqrt(np.square(val_pred - val_label) + np.square(arous_pred - arous_label)))
-        print("\nMean Euclidean Distance:", med)
-
-        # get RMSE
-        rmse_val = np.sqrt(np.mean((val_pred - val_label) ** 2))
-        rmse_arous = np.sqrt(np.mean((arous_pred - arous_label) ** 2))
-        print("\nRMSE Valence:", rmse_val)
-        print("RMSE Arousal:", rmse_arous)
-
-        # get R2
-        r2_val = 1 - np.sum((val_label - val_pred) ** 2) / np.sum((val_label - np.mean(val_label)) ** 2)
-        r2_arous = 1 - np.sum((arous_label - arous_pred) ** 2) / np.sum((arous_label - np.mean(arous_label)) ** 2)
-        print("\nR^2 Valence:", r2_val)
-        print("R^2 Arousal:", r2_arous)
-
-    return med, r2_val, r2_arous, rmse_val, rmse_arous
     
     
 def evaluate_results(config, loss, accuracy, test_label, test_pred, cls_label, cls_pred, circ_label, circ_pred, mr=False):
@@ -284,97 +213,11 @@ def evaluate_results(config, loss, accuracy, test_label, test_pred, cls_label, c
 
     if config.num_class > 1:
         report_classification_results(test_label, test_pred, config, mr)
-
-    elif config.label_type == "tricycle":
-        mean_mad = np.mean(mad, axis=0)
-        median_mad = np.median(mad, axis=0)
-        cycles = ["hour", "day", "week"]
-        for i, cycle in enumerate(cycles):
-            print("\n-------- Report for {}".format(cycle))
-            report_classification_results(cls_label[:, i], cls_pred[:, i], config, cycle)
-            print("mean angular displacement: ", mean_mad[i])
-            print("median angular displacement: ", median_mad[i])
-            print()
-
     else:
-        mean_mad = np.mean(mad)
-        median_mad = np.median(mad)
-        if mr:
-            mad_run = np.split(mad, config.n_run)
-            mean_mad_run = np.mean(mad_run, 1)
-            median_mad_run = np.median(mad_run, 1)
-            print("mean ad: ", mean_mad_run)
-            print("mean ad over runs: ", np.mean(mean_mad_run))
+        report_classification_results(cls_label, cls_pred, config, mr)
 
-            print("mad: ", median_mad_run)
-            print("mad over runs: ", np.median(median_mad_run))
-
-        else:
-            print("mean angular displacement: ", mean_mad)
-            print("median angular displacement: ", median_mad)
-
-        if config.label_type == "va":
-            get_va_scores(config, r_label, r_pred, val_label, val_pred, arous_label, arous_pred, mr)
-        report_classification_results(cls_label, cls_pred, config)
-
-    if config.loss_type != 'svm' and config.label_type != "tricycle":
+    if config.loss_type != 'svm':
         report_precision(circ_label, circ_pred, config, mr)
-
-
-def save_results_to_h5(config, mean_mad, median_mad, med=None, r2_val=None, r2_arous=None, rmse_val=None, rmse_arous=None):
-    """Save model's accuracy to <results_dir>/results.h5
-
-    The model types (automatically expended by path_util and corresponding to the string appended to logs and save
-    directories and found in config.model_type). are the keys for the accuracy entry.
-    <results_directory> is automatically set to correspond to config.save_dir + dataset. This means the results of all
-    models trained on a given dataset are in <results_dir>/results.h5.
-
-    If the accuracy of a model is already in results.h5, the old value is replaced with the new value.
-
-    Parameters
-    ----------
-    config : config
-    acc : ndarray
-        accuracy
-
-    Returns
-    -------
-    None
-    """
-    print("\n\n ========== Saving to h5 ==========")
-    results = list(filter(None, [np.mean(mean_mad), np.mean(median_mad), med, r2_val, r2_arous, rmse_val, rmse_arous]))
-    results_name = ['mean_mad', 'median_mad', 'med', 'r2_val', 'r2_arous', 'rmse_val', 'rmse_arous']
-    # save results to h5 file
-    if not os.path.exists(config.results_dir):
-        os.makedirs(config.results_dir)
-    done = False
-    if not config.eq1_pieces:
-        for i, result in enumerate(results):
-            print("Saving {} results to results.h5".format(results_name[i]))
-            # TODO add loss
-            while not done:
-                try:
-                    f = h5py.File(config.results_dir + "/results.h5", "a")
-
-                    try:
-                        saved = f["{}/{}".format(results_name[i], config.model_type)]
-                        print("Results already saved, replacing with new value")
-                        try:
-                            saved[...] = result
-                        except TypeError:
-                            print('problem saving data {}, exiting without saving'.format(results_name[i]))
-
-                    except KeyError:
-                        f.create_dataset("{}/{}".format(results_name[i], config.model_type), data=result)
-
-                    f.close()
-                    done = True
-
-                except:
-                    time.sleep(1)
-                    print("File is used by another process, trying again in 1 sec")
-
-            done = False
 
 
 if __name__ == "__main__":
