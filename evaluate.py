@@ -212,9 +212,9 @@ def evaluate_results(config, loss, accuracy, test_label, test_pred, cls_label, c
     report_accuracy(accuracy, config, mr)
 
     if config.num_class > 1:
-        report_classification_results(test_label, test_pred, config, mr)
+        report_classification_results(test_label, test_pred, config)
     else:
-        report_classification_results(cls_label, cls_pred, config, mr)
+        report_classification_results(cls_label, cls_pred, config)
 
     if config.loss_type != 'svm':
         report_precision(circ_label, circ_pred, config, mr)
