@@ -51,14 +51,10 @@ class PWCirc(nn.Module):
         # use default init for linear weights instead of convolution
         bound = 1 / math.sqrt(self.multi_head_linear.weight.size(1))
 
-        # use default or range based init for bias
-        low_bound = config.min_range if config.bias_range_init else -bound
-        high_bound = config.max_range if config.bias_range_init else bound
-
         for i in range(self.multi_head_linear.weight.size(0)):
             torch.nn.init.uniform_(self.multi_head_linear.weight[i], -bound, bound)
             if self.multi_head_linear.bias is not None:
-                torch.nn.init.uniform_(self.multi_head_linear.bias[i], low_bound, high_bound)
+                torch.nn.init.uniform_(self.multi_head_linear.bias[i], -bound, bound)
 
     def forward(self, x):
         x = x.unsqueeze(-1).repeat(1, self.num_cuts, 1)
