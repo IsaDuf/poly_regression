@@ -110,9 +110,9 @@ def train(config):
     print("Training")
     print("\nStart training on device: {}".format(DEVICE))
 
-    # only way to pass run number to workers init function
-    global RUN
-    RUN = config.run
+    # # only way to pass run number to workers init function
+    # global RUN
+    # RUN = config.run
 
     # Initialize Dataset
     train_data = dataset_init(config, "train", config.train)
@@ -707,10 +707,10 @@ def main(config):
     else:
         if config.mode == "train":
             train(config)
-            lo, acc, t_y, t_p, cl_y, cl_p, circ_y, circ_p, mad = test(config)
+            lo, acc, t_y, t_p, cl_y, cl_p, circ_y, circ_p = test(config)
 
         elif config.mode == "test":
-            lo, acc, t_y, t_p, cl_y, cl_p, circ_y, circ_p, mad = test(config)
+            lo, acc, t_y, t_p, cl_y, cl_p, circ_y, circ_p = test(config)
 
         else:
             raise ValueError("Unknown run mode \"{}\"".format(config.mode))
@@ -725,7 +725,7 @@ def main(config):
         circ_pred = np.array(circ_p)
 
         evaluate.evaluate_results(config, loss, accuracy, test_label, test_pred,
-                                  cls_label, cls_pred, circ_label, circ_pred)
+                                  cls_label, cls_pred, circ_label, circ_pred, mr=config.cv)
 
 
 if __name__ == "__main__":
