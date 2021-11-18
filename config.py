@@ -39,7 +39,7 @@ main_arg.add_argument("--add_to_path", type=str,
 data_arg = add_argument_group("Dataset")
 
 data_arg.add_argument("--train", type=str,
-                      default="CircSynth",
+                      default="circMood.h5",
                       choices=["circMood.csv", "circMood.h5"],
                       help="Path to training dataset file. "
                            "When using circMood, include extension e.g. circMood.h5")
@@ -77,11 +77,11 @@ data_arg.add_argument("--num_tag", type=int,
                            "are small intervals of the prediction's circular (linear) domain")
 
 data_arg.add_argument("--min_range", type=float,
-                      default=-np.pi,
+                      default=1,
                       help="Lower bound of the range of continuous data labels")
 
 data_arg.add_argument("--max_range", type=float,
-                      default=np.pi,
+                      default=6,
                       help="Upper bound of the range of continuous data labels")
 
 data_arg.add_argument("--standardize", type=str2bool,
@@ -99,7 +99,7 @@ data_arg.add_argument("--one_batch", type=str2bool,
 train_arg = add_argument_group("Training")
 
 train_arg.add_argument("--lr", type=float,
-                       default=3e-04,
+                       default=1e-04,
                        help="Learning rate")
 
 train_arg.add_argument("--bs", type=int,
@@ -111,12 +111,17 @@ train_arg.add_argument("--num_e", type=int,
                        help="Number of epochs, determined by int((config.num_it/bpere) and "
                             "bpere is the ceiling of (size of training data / batch size)")
 
+train_arg.add_argument("--num_it", type=int,
+                       default=28000,
+                       help="Number of epochs, determined by int((config.num_it/bpere) and "
+                            "bpere is the ceiling of (size of training data / batch size)")
+
 train_arg.add_argument("--val_intv", type=int,
-                       default=100,
+                       default=56,
                        help="Validation interval")
 
 train_arg.add_argument("--rep_intv", type=int,
-                       default=500,
+                       default=28,
                        help="Report interval")
 
 train_arg.add_argument("--optim", type=str,
