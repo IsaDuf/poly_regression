@@ -1,25 +1,27 @@
 Polygonal Approximation of Circular Regression
 =======================================
-Pytorch implementation of the paper "Using Circular Models to Improve Music Emotion Recognition".
-I. Dufour and G. Tzanetakis, "Using Circular Models to Improve Music Emotion Recognition," in IEEE Transactions on Affective Computing, vol. 12, no. 3, pp. 666-681, 1 July-Sept. 2021, doi: 10.1109/TAFFC.2018.2885744.
+PyTorch implementation of 
+[Using Circular Models to Improve Music Emotion Recognition](https://ieeexplore.ieee.org/abstract/document/8567988).
 
 ## Description
 
-Pytorch implementation of the models used for the paper.
-Implementation used in paper was not originally made in pytorch.
+PyTorch's implementation of the models used for the paper.
+Original implementation was not in PyTorch, so results might not be identical to those
+presented in the paper.
 
 Disclaimer: This repo might be incomplete at the moment by will be updated shortly.
 
 ## Getting Started
 
 ### Dependencies
+* [pytorch](https://pytorch.org/)
+* [numpy](https://numpy.org/)
+* [scikit-learn](https://scikit-learn.org/stable/)
+* [pandas](https://pandas.pydata.org/)
+* [h5py](https://www.h5py.org/)
+* [tensorboardX](https://github.com/lanpa/tensorboardX)
 
-* numpy
-* scipy
-* sklearn
-* pytorch
-* tensorboardX
-* h5py
+see requirements.txt
 
 ### Installing
 
@@ -42,6 +44,17 @@ python main.py --h
 ## Authors
 
 Isabelle Dufour  
+
+Please cite if using this code or dataset
+@ARTICLE{8567988,
+  author={Dufour, Isabelle and Tzanetakis, George},
+  journal={IEEE Transactions on Affective Computing}, 
+  title={Using Circular Models to Improve Music Emotion Recognition}, 
+  year={2021},
+  volume={12},
+  number={3},
+  pages={666-681},
+  doi={10.1109/TAFFC.2018.2885744}}
 
 ## Version History
     
