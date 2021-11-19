@@ -85,7 +85,7 @@ data_arg.add_argument("--max_range", type=float,
                       help="Upper bound of the range of continuous data labels")
 
 data_arg.add_argument("--standardize", type=str2bool,
-                      default=False,
+                      default=True,
                       help="Whether to standardize with mean/std or not")
 
 data_arg.add_argument("--one_batch", type=str2bool,
